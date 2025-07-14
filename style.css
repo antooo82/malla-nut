@@ -1,38 +1,303 @@
-
 body {
-    font-family: sans-serif;
-    background-color: #fff;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f5; /* Un gris muy claro, similar al del fondo de la imagen */
+    margin: 20px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
     color: #333;
-    padding: 20px;
+    line-height: 1.6;
 }
+
+.container {
+    background-color: #ffffff; /* Fondo blanco para el contenedor principal */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 90%;
+    max-width: 1400px; /* Aumentar el ancho máximo para acomodar más contenido */
+    display: flex;
+    flex-wrap: wrap; /* Permite que los bloques de año se envuelvan */
+    gap: 30px; /* Espacio entre los bloques de año */
+    justify-content: center;
+}
+
 h1 {
-    color: #663399;
+    width: 100%; /* El título ocupa todo el ancho */
+    text-align: center;
+    color: #5d3587; /* Un morado oscuro similar al título de la imagen */
+    margin-bottom: 40px;
+    font-size: 2.2em;
+}
+
+h2 {
+    width: 100%;
+    text-align: center;
+    color: #7B4B9D; /* Un morado intermedio para los títulos de año */
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    padding: 10px 0;
+    border-bottom: 2px solid #D6BEEF; /* Línea separadora para el año */
+}
+
+h3 {
+    background-color: #D6BEEF; /* Fondo lila claro para el título del semestre */
+    color: #5d3587; /* Texto morado oscuro para el título del semestre */
+    padding: 15px;
+    margin: 0;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    font-size: 1.3em;
     text-align: center;
 }
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 10px;
-    margin-top: 20px;
+
+.year-block {
+    flex: 1; /* Permite que los bloques de año crezcan y ocupen espacio */
+    min-width: 450px; /* Ancho mínimo para cada bloque de año */
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Espacio entre los semestres dentro de un año */
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #FFF0F5; /* Fondo rosa muy claro para agrupar los años */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
-.materia {
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    padding: 10px;
-    cursor: pointer;
+
+
+.semester-box {
+    background-color: #e6e6fa; /* Lavanda para el fondo del semestre */
+    border-radius: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Asegura que el borde redondeado del encabezado se aplique correctamente */
 }
-.materia.exonerada {
-    background-color: #e6e0f8;
-    border-color: #663399;
-    text-decoration: line-through;
+
+.course-list {
+    padding: 15px;
 }
-.materia.examen {
-    border-style: dotted;
-    border-color: #663399;
+
+/* Estilo para cada ítem de curso - ¡Ahora clickeable! */
+.course-item {
+    background-color: #f8f8ff; /* Blanco grisáceo para los ítems de curso */
+    border: 1px solid #D6BEEF; /* Borde lila claro */
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95em;
+    color: #444;
+    cursor: pointer; /* Indica que es clickeable */
+    transition: background-color 0.3s ease; /* Suaviza el cambio de color */
 }
-.contador {
-    margin-top: 30px;
-    text-align: center;
-    color: #663399;
+
+.course-item:last-child {
+    margin-bottom: 0;
+}
+
+.course-item:hover {
+    background-color: #e0e0f0; /* Pequeño cambio al pasar el mouse */
+}
+
+/* Estilo para cuando un curso está aprobado (línea tachada) */
+.course-item.approved {
+    background-color: #d4edda; /* Un verde claro para aprobado */
+    border-color: #28a745; /* Borde verde más oscuro */
+    color: #155724; /* Texto verde oscuro */
+}
+
+.course-item.approved .course-name {
+    text-decoration: line-through; /* La línea tachada */
+    font-weight: normal; /* Opcional: hace que el texto tachado sea menos grueso */
+    color: #333; /* Un poco más oscuro que el texto normal para que se vea el tachado */
+}
+
+.course-name {
+    flex-grow: 1;
+    margin: 0;
     font-weight: bold;
+}
+
+.course-credits {
+    margin: 0;
+    color: #666;
+    font-size: 0.85em;
+    text-align: right;
+    min-width: 40px; /* Asegura que los créditos tengan un ancho mínimo */
+}
+
+/* Estilos para la sección de Electivas */
+.electives-section {
+    background-color: #ffe0f0; /* Un rosa más intenso para las electivas */
+    border-color: #ffb3d9;
+}
+
+.electives-section h3 {
+    background-color: #ffb3d9; /* Rosa para el encabezado de electivas */
+    color: #87355d;
+}
+
+.elective-input-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px; /* Espacio arriba del grupo de inputs */
+    padding: 15px; /* Mismo padding que course-list */
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+    align-items: center;
+    border-top: 1px solid #D6BEEF; /* Separador visual */
+}
+
+.elective-input-group input[type="text"],
+.elective-input-group input[type="number"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    flex-grow: 1; /* Permite que los inputs se expandan */
+    min-width: 120px; /* Ancho mínimo para inputs */
+}
+
+.elective-input-group input[type="number"] {
+    width: 80px; /* Ancho específico para créditos */
+}
+
+.elective-input-group button {
+    background-color: #7B4B9D; /* Color del botón "Agregar" */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.elective-input-group button:hover {
+    background-color: #5d3587;
+}
+
+/* Estilo para cada ítem de electiva (con checkbox) */
+.elective-item {
+    background-color: #fff; /* Blanco para ítems de electivas individuales */
+    border: 1px dashed #ffb3d9; /* Borde punteado para diferenciarlas */
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+    cursor: pointer; /* También clickeable para el checkbox */
+}
+.elective-item:hover {
+    background-color: #f8f8ff;
+}
+
+.elective-item label { /* Asegura que toda la fila sea clickeable para el checkbox */
+    display: flex;
+    align-items: center;
+    width: 100%;
+    cursor: inherit; /* Hereda el cursor pointer */
+}
+
+.elective-item input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.1); /* Hace el checkbox un poco más grande */
+}
+
+.elective-item .elective-name {
+    flex-grow: 1;
+    font-weight: bold;
+}
+
+.elective-item .elective-credits {
+    color: #87355d; /* Color para los créditos de electivas */
+}
+
+/* Estilo para electivas aprobadas (con checkbox) */
+.elective-item.approved {
+    background-color: #d4edda; /* Verde claro para electivas aprobadas */
+    border-color: #28a745;
+    color: #155724;
+}
+
+.remove-elective-btn {
+    background: none;
+    border: none;
+    color: #cc0000; /* Color rojo para el botón de eliminar */
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-left: 10px;
+    padding: 0 5px;
+    line-height: 1;
+}
+
+.remove-elective-btn:hover {
+    color: #ff0000;
+}
+
+.total-credits-box h3 {
+    background-color: #bf80c0; /* Un morado diferente para el total de créditos */
+    color: white;
+}
+
+.total-electives-display {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #5d3587;
+    margin: 10px 0;
+}
+
+/* Responsivo para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .year-block {
+        min-width: 95%; /* Ocupa casi todo el ancho disponible */
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    h3 {
+        font-size: 1.1em;
+        padding: 12px;
+    }
+
+    .course-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 8px 12px;
+    }
+
+    .course-credits {
+        width: 100%;
+        text-align: left;
+        margin-top: 5px;
+    }
+
+    .elective-input-group {
+        flex-direction: column;
+        padding: 10px; /* Ajuste el padding para móvil */
+    }
+
+    .elective-input-group input[type="text"],
+    .elective-input-group input[type="number"],
+    .elective-input-group button {
+        width: 100%;
+        margin-bottom: 5px; /* Espacio entre elementos en móvil */
+    }
+    .elective-input-group button:last-child {
+        margin-bottom: 0;
+    }
 }
