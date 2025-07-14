@@ -112,6 +112,13 @@ h3 {
     color: #333; /* Un poco más oscuro que el texto normal para que se vea el tachado */
 }
 
+/* Estado intermedio (semi aprobado) */
+.course-item.semi-approved {
+    background-color: #d1d1e0; /* Gris lila oscuro, tono intermedio */
+    border-color: #a09fcf; /* Borde un poco más oscuro */
+    color: #444;
+}
+
 .course-name {
     flex-grow: 1;
     margin: 0;
