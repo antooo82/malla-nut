@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return localStorage.getItem(`course_state_${courseName}`) || 'normal';
     }
 
-    // ESTADOS: normal → pending → approved → normal
+    // ESTADOS: normal → semi-approved → approved → normal
     allCourseItems.forEach(item => {
         const name = item.dataset.name;
         const credits = parseCreditsFromText(item.textContent);
@@ -35,9 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let clickTimer;
 
         function applyState(state) {
-            item.classList.remove('approved', 'pending');
-            if (state === 'pending') {
-                item.classList.add('pending');
+            item.classList.remove('approved', 'semi-approved');
+            if (state === 'semi-approved') {
+                item.classList.add('semi-approved');
             } else if (state === 'approved') {
                 item.classList.add('approved');
             }
@@ -53,10 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(clickTimer);
             clickTimer = setTimeout(() => {
                 if (clickCount === 1) {
-                    // 1 clic → pendiente
-                    state = (state === 'pending') ? 'normal' : 'pending';
+                    // 1 clic → semi-approved
+                    state = (state === 'semi-approved') ? 'normal' : 'semi-approved';
                 } else if (clickCount === 2) {
-                    // 2 clics → aprobado
+                    // 2 clics → approved
                     state = (state === 'approved') ? 'normal' : 'approved';
                 } else if (clickCount >= 3) {
                     state = 'normal';
