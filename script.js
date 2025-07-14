@@ -1,8 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     const allCourseItems = document.querySelectorAll('.year-block .course-item');
-    const totalObligatoryCreditsSpan = document.getElementById('total-obligatory-credits');
-    const totalElectivesCreditsSpan = document.getElementById('total-electives-credits');
-    const totalAllCreditsSpan = document.getElementById('total-all-credits');
     const addElectiveBtn = document.getElementById('add-elective-btn');
     const electiveNameInput = document.getElementById('new-elective-name');
     const electiveCreditsInput = document.getElementById('new-elective-credits');
@@ -19,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para aplicar el estado visual a un elemento de curso
     function applyCourseVisualState(item, state) {
-        item.classList.remove('approved', 'semi-approved');
+        item.classList.remove('approved', 'semi-approved'); // Quitar todas las clases de estado
         if (state === 'semi-approved') {
             item.classList.add('semi-approved');
         } else if (state === 'approved') {
@@ -27,40 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Función para actualizar todos los displays de créditos
-    function updateTotalCreditsDisplays() {
-        let currentObligatoryCredits = 0;
-        allCourseItems.forEach(item => {
-            if (loadCourseState(item.dataset.name) === 'approved') {
-                currentObligatoryCredits += parseInt(item.dataset.credits);
-            }
-        });
-        totalObligatoryCreditsSpan.textContent = currentObligatoryCredits;
-
-        let currentElectivesApprovedCredits = 0;
-        electiveCoursesContainer.querySelectorAll('.elective-item input[type="checkbox"]').forEach(checkbox => {
-            if (checkbox.checked) {
-                currentElectivesApprovedCredits += parseInt(checkbox.dataset.credits || 0);
-            }
-        });
-        totalElectivesCreditsSpan.textContent = currentElectivesApprovedCredits;
-
-        totalAllCreditsSpan.textContent = currentObligatoryCredits + currentElectivesApprovedCredits;
-
-        // Guardar los totales en localStorage para persistencia
-        localStorage.setItem('totalObligatoryCredits', currentObligatoryCredits);
-        localStorage.setItem('totalElectivesApprovedCredits', currentElectivesApprovedCredits);
-    }
-
     // Cargar y configurar el estado de las materias obligatorias
     allCourseItems.forEach(item => {
         const name = item.dataset.name;
-        let state = loadCourseState(name);
+        let state = loadCourseState(name); // Carga el estado guardado
 
-        applyCourseVisualState(item, state); // Aplica el estado visual guardado al cargar
+        applyCourseVisualState(item, state); // Aplica el estado visual al cargar la página
 
         item.addEventListener('click', () => {
-            let currentState = loadCourseState(name);
+            let currentState = loadCourseState(name); // Obtiene el estado actual del local storage
             let newState;
 
             switch (currentState) {
@@ -77,20 +49,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     newState = 'normal'; // En caso de estado desconocido, vuelve a normal
             }
 
-            applyCourseVisualState(item, newState);
-            saveCourseState(name, newState);
-            updateTotalCreditsDisplays(); // Recalcular y actualizar todos los créditos
+            applyCourseVisualState(item, newState); // Aplica la nueva clase visual
+            saveCourseState(name, newState);       // Guarda el nuevo estado en localStorage
         });
     });
 
-    // --- Lógica para Electivas ---
+    // --- Lógica para Electivas (sin conteo de créditos, solo marcado visual) ---
 
     function saveElectives() {
         const electives = [];
         electiveCoursesContainer.querySelectorAll('.elective-item').forEach(item => {
             const name = item.querySelector('.elective-name').textContent;
             const credits = item.querySelector('input[type="checkbox"]').dataset.credits;
-            const checked = item.querySelector('input[type="checkbox"]').checked;
+            const checked = item.querySelector('input[type="checkbox"]').checked; // Estado del checkbox
             electives.push({ name, credits: parseInt(credits), checked });
         });
         localStorage.setItem('electives', JSON.stringify(electives));
@@ -99,6 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function createElectiveElement(name, credits, checked = false) {
         const item = document.createElement('div');
         item.classList.add('elective-item');
+
+        // Aplica la clase visual si el checkbox está marcado
+        if (checked) {
+            item.classList.add('checked-style'); // Usamos 'checked-style' para electivas
+        }
 
         item.innerHTML = `
             <label>
@@ -109,23 +85,16 @@ document.addEventListener('DOMContentLoaded', () => {
             <button class="remove-elective-btn">X</button>
         `;
 
-        // Aplicar clase 'approved' si el checkbox está marcado al crear el elemento
-        if (checked) {
-            item.classList.add('approved');
-        }
-
         const checkbox = item.querySelector('input[type="checkbox"]');
         checkbox.addEventListener('change', () => {
-            item.classList.toggle('approved', checkbox.checked); // Añade/quita la clase 'approved'
-            updateTotalCreditsDisplays(); // Recalcular créditos de electivas
-            saveElectives();
+            item.classList.toggle('checked-style', checkbox.checked); // Alterna la clase visual
+            saveElectives(); // Guarda el estado del checkbox
         });
 
         const removeBtn = item.querySelector('.remove-elective-btn');
         removeBtn.addEventListener('click', () => {
             item.remove();
-            updateTotalCreditsDisplays(); // Recalcular créditos de electivas
-            saveElectives();
+            saveElectives(); // Guarda la lista de electivas actualizada
         });
 
         return item;
@@ -147,8 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         electiveCreditsInput.value = '';
         electiveNameInput.focus();
 
-        updateTotalCreditsDisplays(); // Actualizar el total de electivas
-        saveElectives();
+        saveElectives(); // Guarda la nueva electiva
     }
 
     function loadElectives() {
@@ -169,6 +137,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Cargar los estados y electivas al inicio
-    loadElectives(); // Cargar electivas primero
-    updateTotalCreditsDisplays(); // Luego actualizar todos los contadores
+    loadElectives();
 });
