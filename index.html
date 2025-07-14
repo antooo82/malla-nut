@@ -198,8 +198,30 @@
             <div class="semester-box">
                 <h3>Mis Electivas</h3>
                 <div class="course-list" id="elective-courses-container">
-                    <!-- Aquí se añadirán las electivas dinámicamente -->
-                </div>
+                    </div>
 
                 <div class="elective-input-group">
-                    <input type="text" id="new-elective-name" placeholder="Nombre de
+                    <input type="text" id="new-elective-name" placeholder="Nombre de electiva" />
+                    <input type="number" id="new-elective-credits" placeholder="Créditos" min="1" />
+                    <button id="add-elective-btn">Agregar Electiva</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="year-block total-credits-section">
+            <h2>Créditos Totales</h2>
+            <div class="semester-box total-credits-box">
+                <h3>Resumen</h3>
+                <div class="course-list">
+                    <div class="total-electives-display">Créditos Obligatorios Aprobados: <span id="total-obligatory-credits">0</span></div>
+                    <div class="total-electives-display">Créditos Electivas/Optativas Aprobadas: <span id="total-electives-credits">0</span></div>
+                    <div class="total-electives-display">Créditos Totales Aprobados: <span id="total-all-credits">0</span></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
