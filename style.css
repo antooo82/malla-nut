@@ -112,11 +112,11 @@ h3 {
     color: #333; /* Un poco más oscuro que el texto normal para que se vea el tachado */
 }
 
-/* Estado intermedio (semi aprobado) */
+/* Estado intermedio (semi aprobado / "debo dar examen") */
 .course-item.semi-approved {
-    background-color: #d1d1e0; /* Gris lila oscuro, tono intermedio */
-    border-color: #a09fcf; /* Borde un poco más oscuro */
-    color: #444;
+    background-color: #e0e0e0; /* Gris más neutral para "debo dar examen" */
+    border-color: #a0a0a0; /* Borde gris oscuro */
+    color: #555;
 }
 
 .course-name {
@@ -226,6 +226,14 @@ h3 {
     color: #155724;
 }
 
+/* Estado intermedio (semi aprobado) para electivas, aunque no lo uses con checkbox */
+.elective-item.semi-approved {
+    background-color: #e0e0e0;
+    border-color: #a0a0a0;
+    color: #555;
+}
+
+
 .remove-elective-btn {
     background: none;
     border: none;
@@ -241,18 +249,44 @@ h3 {
     color: #ff0000;
 }
 
+/* Estilos para la nueva sección de totales */
+.total-credits-section {
+    background-color: #e6f7ff; /* Un azul claro para la sección de totales */
+    border-color: #a3daff;
+    flex-basis: 100%; /* Ocupa todo el ancho */
+    max-width: 100%; /* Asegura que no haya desbordamiento */
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.total-credits-section h2 {
+    color: #007bff; /* Azul para el título principal de totales */
+    border-bottom-color: #a3daff;
+}
+
+.total-credits-box {
+    background-color: #dbeeff; /* Azul aún más claro para el box interno */
+}
+
 .total-credits-box h3 {
-    background-color: #bf80c0; /* Un morado diferente para el total de créditos */
-    color: white;
+    background-color: #a3daff; /* Azul medio para el encabezado de resumen */
+    color: #0056b3;
 }
 
 .total-electives-display {
     text-align: center;
     font-size: 1.2em;
     font-weight: bold;
-    color: #5d3587;
+    color: #004085; /* Azul oscuro para los textos de créditos */
     margin: 10px 0;
+    padding: 5px;
+    border-bottom: 1px dashed #cceeff; /* Línea punteada entre los totales */
 }
+
+.total-electives-display:last-child {
+    border-bottom: none;
+}
+
 
 /* Responsivo para pantallas más pequeñas */
 @media (max-width: 768px) {
