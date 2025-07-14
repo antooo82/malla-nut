@@ -1,74 +1,176 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const allCourseItems = document.querySelectorAll('.year-block .course-item');
+    const totalElectivesCreditsSpan = document.getElementById('total-electives-credits');
+    const addElectiveBtn = document.getElementById('add-elective-btn');
+    const electiveNameInput = document.getElementById('new-elective-name');
+    const electiveCreditsInput = document.getElementById('new-elective-credits');
+    const electiveCoursesContainer = document.getElementById('elective-courses-container');
 
-const materias = [
-    { nombre: "Curso introductorio", creditos: 1 },
-    { nombre: "Bases biológicas de la nutrición humana", creditos: 11 },
-    { nombre: "Microbiología alimentaria", creditos: 8 },
-    { nombre: "Fundamentos de la nutrición humana", creditos: 11 },
-    { nombre: "Química Alimentaria", creditos: 8 },
-    { nombre: "Metodología de las prácticas articuladoras", creditos: 3 },
-    { nombre: "Normativa alimentaria", creditos: 4 },
-    { nombre: "Bioquímica Nutricional", creditos: 13 },
-    { nombre: "Seguridad alimentaria nutricional y soberanía alimentaria", creditos: 11 },
-    { nombre: "Administración aplicada al ejercicio de la profesión", creditos: 5 },
-    { nombre: "Práctica articuladora I", creditos: 5 },
-    { nombre: "Diagnóstico y evaluación del estado nutricional", creditos: 5 },
-    { nombre: "Nutrición y alimentación en el ciclo de la vida", creditos: 10 },
-    { nombre: "Salud pública", creditos: 5 },
-    { nombre: "Bioestadística y métodos de investigación", creditos: 10 },
-    { nombre: "Práctica articuladora II", creditos: 5 },
-    { nombre: "Producción e industrialización de alimentos", creditos: 8 },
-    { nombre: "Transformaciones físico- química de los alimentos", creditos: 11 },
-    { nombre: "Epidemiología nutricional", creditos: 6 },
-    { nombre: "Educación en alimentación y nutrición Fundamentos y praxis", creditos: 11 },
-    { nombre: "Práctica articuladora III", creditos: 5 },
-    { nombre: "Nutrición clínica I", creditos: 11 },
-    { nombre: "Ética de la alimentación", creditos: 3 },
-    { nombre: "Nutrición poblacional", creditos: 10 },
-    { nombre: "Diseño de alimentos", creditos: 4 },
-    { nombre: "Práctica articuladora IV", creditos: 8 },
-    { nombre: "Nutrición Clínica II", creditos: 11 },
-    { nombre: "Gestión de servicios de alimentación colectiva", creditos: 11 },
-    { nombre: "Práctica articuladora V", creditos: 17 },
-    { nombre: "Práctica profesional", creditos: 45 },
-    { nombre: "TFG", creditos: 45 }
-];
+    let totalObligatoryCredits = 0;
 
-let creditosExo = 0;
-let creditosTotal = 0;
+    function updateTotalCreditsDisplay() {
+        const electiveCredits = parseInt(totalElectivesCreditsSpan.textContent) || 0;
+        document.getElementById('total-electives-credits').textContent = electiveCredits + totalObligatoryCredits;
+    }
 
-function actualizarContador() {
-    document.getElementById("creditosExo").innerText = creditosExo;
-    document.getElementById("creditosTotal").innerText = creditosTotal;
-}
+    function parseCreditsFromText(text) {
+        const match = text.match(/Cr:\s*(\d+)/);
+        return match ? parseInt(match[1]) : 0;
+    }
 
-function crearMateria(materia) {
-    const div = document.createElement("div");
-    div.className = "materia";
-    div.textContent = `${materia.nombre} - ${materia.creditos} cr`;
-    div.onclick = () => {
-        if (div.classList.contains("exonerada")) {
-            div.classList.remove("exonerada");
-            creditosExo -= materia.creditos;
-        } else if (div.classList.contains("examen")) {
-            div.classList.remove("examen");
-        } else if (!div.classList.contains("exonerada")) {
-            div.classList.add("exonerada");
-            creditosExo += materia.creditos;
+    function saveCourseState(courseName, state) {
+        localStorage.setItem(`course_state_${courseName}`, state);
+    }
+
+    function loadCourseState(courseName) {
+        return localStorage.getItem(`course_state_${courseName}`) || 'normal';
+    }
+
+    // ESTADOS: normal → pending → approved → normal
+    allCourseItems.forEach(item => {
+        const name = item.dataset.name;
+        const credits = parseCreditsFromText(item.textContent);
+        let state = loadCourseState(name);
+        let clickCount = 0;
+        let clickTimer;
+
+        function applyState(state) {
+            item.classList.remove('approved', 'pending');
+            if (state === 'pending') {
+                item.classList.add('pending');
+            } else if (state === 'approved') {
+                item.classList.add('approved');
+            }
         }
-        actualizarContador();
-    };
-    div.oncontextmenu = (e) => {
-        e.preventDefault();
-        if (!div.classList.contains("exonerada")) {
-            div.classList.toggle("examen");
-        }
-    };
-    creditosTotal += materia.creditos;
-    return div;
-}
 
-window.onload = () => {
-    const grid = document.querySelector(".grid");
-    materias.forEach(m => grid.appendChild(crearMateria(m)));
-    actualizarContador();
-};
+        applyState(state);
+        if (state === 'approved') {
+            totalObligatoryCredits += credits;
+        }
+
+        item.addEventListener('click', () => {
+            clickCount++;
+            clearTimeout(clickTimer);
+            clickTimer = setTimeout(() => {
+                if (clickCount === 1) {
+                    // 1 clic → pendiente
+                    state = (state === 'pending') ? 'normal' : 'pending';
+                } else if (clickCount === 2) {
+                    // 2 clics → aprobado
+                    state = (state === 'approved') ? 'normal' : 'approved';
+                } else if (clickCount >= 3) {
+                    state = 'normal';
+                }
+
+                applyState(state);
+                saveCourseState(name, state);
+
+                // Recalcular créditos
+                totalObligatoryCredits = 0;
+                allCourseItems.forEach(i => {
+                    if (loadCourseState(i.dataset.name) === 'approved') {
+                        totalObligatoryCredits += parseCreditsFromText(i.textContent);
+                    }
+                });
+
+                updateTotalCreditsDisplay();
+                clickCount = 0;
+            }, 300);
+        });
+    });
+
+    // ELECTIVAS
+    function updateTotalElectivesCredits() {
+        let total = 0;
+        electiveCoursesContainer.querySelectorAll('.elective-item input[type="checkbox"]').forEach(checkbox => {
+            if (checkbox.checked) {
+                total += parseInt(checkbox.dataset.credits || 0);
+            }
+        });
+        totalElectivesCreditsSpan.textContent = total;
+        localStorage.setItem('totalElectivesCredits', total);
+        updateTotalCreditsDisplay();
+    }
+
+    function saveElectives() {
+        const electives = [];
+        electiveCoursesContainer.querySelectorAll('.elective-item').forEach(item => {
+            const name = item.querySelector('.elective-name').textContent;
+            const credits = item.querySelector('input[type="checkbox"]').dataset.credits;
+            const checked = item.querySelector('input[type="checkbox"]').checked;
+            electives.push({ name, credits: parseInt(credits), checked });
+        });
+        localStorage.setItem('electives', JSON.stringify(electives));
+    }
+
+    function createElectiveElement(name, credits, checked = false) {
+        const item = document.createElement('div');
+        item.classList.add('elective-item');
+        if (checked) item.classList.add('approved');
+
+        item.innerHTML = `
+            <label>
+                <input type="checkbox" data-credits="${credits}" ${checked ? 'checked' : ''}>
+                <span class="elective-name">${name}</span>
+            </label>
+            <span class="elective-credits">Cr: ${credits}</span>
+            <button class="remove-elective-btn">X</button>
+        `;
+
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        checkbox.addEventListener('change', () => {
+            item.classList.toggle('approved', checkbox.checked);
+            updateTotalElectivesCredits();
+            saveElectives();
+        });
+
+        const removeBtn = item.querySelector('.remove-elective-btn');
+        removeBtn.addEventListener('click', () => {
+            item.remove();
+            updateTotalElectivesCredits();
+            saveElectives();
+        });
+
+        return item;
+    }
+
+    function addNewElective() {
+        const name = electiveNameInput.value.trim();
+        const credits = parseInt(electiveCreditsInput.value);
+
+        if (!name || isNaN(credits) || credits <= 0) {
+            alert("Por favor, ingresa un nombre y créditos válidos.");
+            return;
+        }
+
+        const item = createElectiveElement(name, credits);
+        electiveCoursesContainer.appendChild(item);
+
+        electiveNameInput.value = '';
+        electiveCreditsInput.value = '';
+        electiveNameInput.focus();
+
+        updateTotalElectivesCredits();
+        saveElectives();
+    }
+
+    function loadElectives() {
+        const saved = JSON.parse(localStorage.getItem('electives') || '[]');
+        saved.forEach(({ name, credits, checked }) => {
+            const el = createElectiveElement(name, credits, checked);
+            electiveCoursesContainer.appendChild(el);
+        });
+        totalElectivesCreditsSpan.textContent = localStorage.getItem('totalElectivesCredits') || '0';
+        updateTotalCreditsDisplay();
+    }
+
+    addElectiveBtn.addEventListener('click', addNewElective);
+    electiveNameInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') addNewElective();
+    });
+    electiveCreditsInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') addNewElective();
+    });
+
+    loadElectives();
+});
