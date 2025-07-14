@@ -2,20 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const allCourseItems = document.querySelectorAll('.year-block .course-item');
     const totalObligatoryCreditsSpan = document.getElementById('total-obligatory-credits');
     const totalElectivesCreditsSpan = document.getElementById('total-electives-credits');
-    const totalAllCreditsSpan = document.getElementById('total-all-credits'); // Nuevo span para el total global
+    const totalAllCreditsSpan = document.getElementById('total-all-credits');
     const addElectiveBtn = document.getElementById('add-elective-btn');
     const electiveNameInput = document.getElementById('new-elective-name');
     const electiveCreditsInput = document.getElementById('new-elective-credits');
     const electiveCoursesContainer = document.getElementById('elective-courses-container');
-
-    let totalObligatoryCredits = 0;
-    let totalElectivesApprovedCredits = 0; // Variable para créditos de electivas aprobadas
-
-    // Función para obtener los créditos de un texto "Cr: X"
-    function parseCreditsFromText(text) {
-        const match = text.match(/Cr:\s*(\d+)/);
-        return match ? parseInt(match[1]) : 0;
-    }
 
     // Funciones para guardar y cargar el estado de un curso en localStorage
     function saveCourseState(courseName, state) {
@@ -28,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para aplicar el estado visual a un elemento de curso
     function applyCourseVisualState(item, state) {
-        item.classList.remove('approved', 'semi-approved'); // Quitar todas las clases de estado
+        item.classList.remove('approved', 'semi-approved');
         if (state === 'semi-approved') {
             item.classList.add('semi-approved');
         } else if (state === 'approved') {
@@ -38,62 +29,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para actualizar todos los displays de créditos
     function updateTotalCreditsDisplays() {
-        totalObligatoryCredits = 0;
+        let currentObligatoryCredits = 0;
         allCourseItems.forEach(item => {
             if (loadCourseState(item.dataset.name) === 'approved') {
-                totalObligatoryCredits += parseInt(item.dataset.credits);
+                currentObligatoryCredits += parseInt(item.dataset.credits);
             }
         });
+        totalObligatoryCreditsSpan.textContent = currentObligatoryCredits;
 
-        // Recalcular créditos de electivas
-        totalElectivesApprovedCredits = 0;
+        let currentElectivesApprovedCredits = 0;
         electiveCoursesContainer.querySelectorAll('.elective-item input[type="checkbox"]').forEach(checkbox => {
             if (checkbox.checked) {
-                totalElectivesApprovedCredits += parseInt(checkbox.dataset.credits || 0);
+                currentElectivesApprovedCredits += parseInt(checkbox.dataset.credits || 0);
             }
         });
+        totalElectivesCreditsSpan.textContent = currentElectivesApprovedCredits;
 
-        totalObligatoryCreditsSpan.textContent = totalObligatoryCredits;
-        totalElectivesCreditsSpan.textContent = totalElectivesApprovedCredits;
-        totalAllCreditsSpan.textContent = totalObligatoryCredits + totalElectivesApprovedCredits;
+        totalAllCreditsSpan.textContent = currentObligatoryCredits + currentElectivesApprovedCredits;
 
-        // Guardar el total de electivas también en localStorage para que persista
-        localStorage.setItem('totalElectivesApprovedCredits', totalElectivesApprovedCredits);
+        // Guardar los totales en localStorage para persistencia
+        localStorage.setItem('totalObligatoryCredits', currentObligatoryCredits);
+        localStorage.setItem('totalElectivesApprovedCredits', currentElectivesApprovedCredits);
     }
 
-    // Inicializar el estado de las materias obligatorias al cargar
+    // Cargar y configurar el estado de las materias obligatorias
     allCourseItems.forEach(item => {
         const name = item.dataset.name;
-        const credits = parseInt(item.dataset.credits); // Usar dataset.credits directamente
         let state = loadCourseState(name);
 
-        applyCourseVisualState(item, state); // Aplica el estado visual guardado
-
-        // Lógica para manejar los 3 estados al hacer clic
-        let clickCount = 0;
-        let clickTimer;
+        applyCourseVisualState(item, state); // Aplica el estado visual guardado al cargar
 
         item.addEventListener('click', () => {
-            clearTimeout(clickTimer); // Limpia el timer en cada clic para detectar clics dobles/triples
-            clickCount++;
+            let currentState = loadCourseState(name);
+            let newState;
 
-            clickTimer = setTimeout(() => {
-                if (clickCount === 1) {
-                    // Primer clic: Si es normal, pasa a semi-approved. Si ya era semi-approved, vuelve a normal.
-                    state = item.classList.contains('semi-approved') ? 'normal' : 'semi-approved';
-                } else if (clickCount === 2) {
-                    // Segundo clic: Si es approved, vuelve a normal. Si no era approved (normal o semi-approved), pasa a approved.
-                    state = item.classList.contains('approved') ? 'normal' : 'approved';
-                } else {
-                    // Tercer clic (o más): Siempre vuelve a normal
-                    state = 'normal';
-                }
+            switch (currentState) {
+                case 'normal':
+                    newState = 'semi-approved'; // 1 clic: normal -> gris (debo dar examen)
+                    break;
+                case 'semi-approved':
+                    newState = 'approved';      // 2 clics: gris -> violeta (aprobado)
+                    break;
+                case 'approved':
+                    newState = 'normal';        // 3 clics: violeta -> normal
+                    break;
+                default:
+                    newState = 'normal'; // En caso de estado desconocido, vuelve a normal
+            }
 
-                applyCourseVisualState(item, state);
-                saveCourseState(name, state);
-                updateTotalCreditsDisplays(); // Actualizar créditos después de cada cambio
-                clickCount = 0; // Reiniciar clickCount para la próxima secuencia de clics
-            }, 300); // 300ms para diferenciar clics
+            applyCourseVisualState(item, newState);
+            saveCourseState(name, newState);
+            updateTotalCreditsDisplays(); // Recalcular y actualizar todos los créditos
         });
     });
 
@@ -113,10 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function createElectiveElement(name, credits, checked = false) {
         const item = document.createElement('div');
         item.classList.add('elective-item');
-        // El estado 'approved' se aplica si el checkbox está marcado
-        if (checked) {
-            item.classList.add('approved');
-        }
 
         item.innerHTML = `
             <label>
@@ -126,6 +108,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="elective-credits">Cr: ${credits}</span>
             <button class="remove-elective-btn">X</button>
         `;
+
+        // Aplicar clase 'approved' si el checkbox está marcado al crear el elemento
+        if (checked) {
+            item.classList.add('approved');
+        }
 
         const checkbox = item.querySelector('input[type="checkbox"]');
         checkbox.addEventListener('change', () => {
@@ -182,6 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Cargar los estados y electivas al inicio
-    loadElectives(); // Cargar electivas primero para que sus checkboxes afecten el total
-    updateTotalCreditsDisplays(); // Actualizar todos los contadores al cargar la página
+    loadElectives(); // Cargar electivas primero
+    updateTotalCreditsDisplays(); // Luego actualizar todos los contadores
 });
