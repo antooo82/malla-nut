@@ -218,17 +218,11 @@ h3 {
     color: #87355d;
 }
 
-/* Estilo para electivas aprobadas (checkbox marcado) */
-.elective-item.approved {
-    background-color: #f1e6f9; /* Mismo violeta clarito que las obligatorias aprobadas */
-    border-color: #7B4B9D;
-    color: #5d3587;
-}
-
-.elective-item.approved .elective-name {
-    text-decoration: line-through;
-    font-weight: bold;
-    text-decoration-color: #7B4B9D;
+/* Estilo para electivas marcadas (sin tachado, solo fondo visual) */
+.elective-item.checked-style { /* Cambiado de 'approved' a 'checked-style' para diferenciar */
+    background-color: #d4edda; /* Un verde clarito para indicar que está marcada */
+    border-color: #28a745;
+    color: #155724;
 }
 
 .remove-elective-btn {
@@ -246,43 +240,7 @@ h3 {
     color: #ff0000;
 }
 
-/* Estilos para la sección de totales */
-.total-credits-section {
-    background-color: #e6f7ff;
-    border-color: #a3daff;
-    flex-basis: 100%;
-    max-width: 100%;
-    padding: 20px;
-    margin-top: 20px;
-}
-
-.total-credits-section h2 {
-    color: #007bff;
-    border-bottom-color: #a3daff;
-}
-
-.total-credits-box {
-    background-color: #dbeeff;
-}
-
-.total-credits-box h3 {
-    background-color: #a3daff;
-    color: #0056b3;
-}
-
-.total-electives-display {
-    text-align: center;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #004085;
-    margin: 10px 0;
-    padding: 5px;
-    border-bottom: 1px dashed #cceeff;
-}
-
-.total-electives-display:last-child {
-    border-bottom: none;
-}
+/* Eliminado: Estilos para la sección de totales, ya no existe en el HTML */
 
 
 /* Responsivo para pantallas más pequeñas */
