@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f5; /* Un gris muy claro, similar al del fondo de la imagen */
+    background-color: #f0f0f5; /* Un gris muy claro */
     margin: 20px;
     padding: 0;
     display: flex;
@@ -15,17 +15,17 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 30px;
     width: 90%;
-    max-width: 1400px; /* Aumentar el ancho máximo para acomodar más contenido */
+    max-width: 1400px;
     display: flex;
-    flex-wrap: wrap; /* Permite que los bloques de año se envuelvan */
-    gap: 30px; /* Espacio entre los bloques de año */
+    flex-wrap: wrap;
+    gap: 30px;
     justify-content: center;
 }
 
 h1 {
-    width: 100%; /* El título ocupa todo el ancho */
+    width: 100%;
     text-align: center;
-    color: #5d3587; /* Un morado oscuro similar al título de la imagen */
+    color: #5d3587; /* Morado oscuro */
     margin-bottom: 40px;
     font-size: 2.2em;
 }
@@ -33,16 +33,16 @@ h1 {
 h2 {
     width: 100%;
     text-align: center;
-    color: #7B4B9D; /* Un morado intermedio para los títulos de año */
+    color: #7B4B9D; /* Morado intermedio */
     margin-bottom: 20px;
     font-size: 1.8em;
     padding: 10px 0;
-    border-bottom: 2px solid #D6BEEF; /* Línea separadora para el año */
+    border-bottom: 2px solid #D6BEEF;
 }
 
 h3 {
-    background-color: #D6BEEF; /* Fondo lila claro para el título del semestre */
-    color: #5d3587; /* Texto morado oscuro para el título del semestre */
+    background-color: #D6BEEF; /* Lila claro */
+    color: #5d3587; /* Morado oscuro */
     padding: 15px;
     margin: 0;
     border-top-left-radius: 12px;
@@ -52,32 +52,31 @@ h3 {
 }
 
 .year-block {
-    flex: 1; /* Permite que los bloques de año crezcan y ocupen espacio */
-    min-width: 450px; /* Ancho mínimo para cada bloque de año */
+    flex: 1;
+    min-width: 450px;
     display: flex;
     flex-direction: column;
-    gap: 25px; /* Espacio entre los semestres dentro de un año */
+    gap: 25px;
     padding: 20px;
     border-radius: 15px;
-    background-color: #FFF0F5; /* Fondo rosa muy claro para agrupar los años */
+    background-color: #FFF0F5; /* Rosa muy claro */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-
 .semester-box {
-    background-color: #e6e6fa; /* Lavanda para el fondo del semestre */
+    background-color: #e6e6fa; /* Lavanda */
     border-radius: 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* Asegura que el borde redondeado del encabezado se aplique correctamente */
+    overflow: hidden;
 }
 
 .course-list {
     padding: 15px;
 }
 
-/* Estilo para cada ítem de curso - ¡Ahora clickeable! */
+/* Estilo para cada ítem de curso */
 .course-item {
-    background-color: #f8f8ff; /* Blanco grisáceo para los ítems de curso */
+    background-color: #f8f8ff; /* Blanco grisáceo */
     border: 1px solid #D6BEEF; /* Borde lila claro */
     border-radius: 8px;
     padding: 10px 15px;
@@ -87,8 +86,8 @@ h3 {
     align-items: center;
     font-size: 0.95em;
     color: #444;
-    cursor: pointer; /* Indica que es clickeable */
-    transition: background-color 0.3s ease; /* Suaviza el cambio de color */
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .course-item:last-child {
@@ -99,24 +98,24 @@ h3 {
     background-color: #e0e0f0; /* Pequeño cambio al pasar el mouse */
 }
 
-/* Estilo para cuando un curso está aprobado (línea tachada) */
+/* Estado "debo dar examen" (gris) - Un clic */
+.course-item.semi-approved {
+    background-color: #e0e0e0; /* Gris */
+    border-color: #a0a0a0; /* Borde gris oscuro */
+    color: #555;
+}
+
+/* Estado "aprobado" (línea violeta, fondo violeta claro) - Dos clics */
 .course-item.approved {
-    background-color: #d4edda; /* Un verde claro para aprobado */
-    border-color: #28a745; /* Borde verde más oscuro */
-    color: #155724; /* Texto verde oscuro */
+    background-color: #f1e6f9; /* Violeta muy claro */
+    border-color: #7B4B9D; /* Borde morado intermedio */
+    color: #5d3587; /* Texto morado oscuro */
 }
 
 .course-item.approved .course-name {
     text-decoration: line-through; /* La línea tachada */
-    font-weight: normal; /* Opcional: hace que el texto tachado sea menos grueso */
-    color: #333; /* Un poco más oscuro que el texto normal para que se vea el tachado */
-}
-
-/* Estado intermedio (semi aprobado / "debo dar examen") */
-.course-item.semi-approved {
-    background-color: #e0e0e0; /* Gris más neutral para "debo dar examen" */
-    border-color: #a0a0a0; /* Borde gris oscuro */
-    color: #555;
+    font-weight: bold; /* Mantener negrita para el tachado */
+    text-decoration-color: #7B4B9D; /* Color de la línea violeta */
 }
 
 .course-name {
@@ -130,7 +129,7 @@ h3 {
     color: #666;
     font-size: 0.85em;
     text-align: right;
-    min-width: 40px; /* Asegura que los créditos tengan un ancho mínimo */
+    min-width: 40px;
 }
 
 /* Estilos para la sección de Electivas */
@@ -147,11 +146,11 @@ h3 {
 .elective-input-group {
     display: flex;
     gap: 10px;
-    margin-top: 15px; /* Espacio arriba del grupo de inputs */
-    padding: 15px; /* Mismo padding que course-list */
-    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+    margin-top: 15px;
+    padding: 15px;
+    flex-wrap: wrap;
     align-items: center;
-    border-top: 1px solid #D6BEEF; /* Separador visual */
+    border-top: 1px solid #D6BEEF;
 }
 
 .elective-input-group input[type="text"],
@@ -159,16 +158,16 @@ h3 {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    flex-grow: 1; /* Permite que los inputs se expandan */
-    min-width: 120px; /* Ancho mínimo para inputs */
+    flex-grow: 1;
+    min-width: 120px;
 }
 
 .elective-input-group input[type="number"] {
-    width: 80px; /* Ancho específico para créditos */
+    width: 80px;
 }
 
 .elective-input-group button {
-    background-color: #7B4B9D; /* Color del botón "Agregar" */
+    background-color: #7B4B9D;
     color: white;
     padding: 8px 15px;
     border: none;
@@ -183,8 +182,8 @@ h3 {
 
 /* Estilo para cada ítem de electiva (con checkbox) */
 .elective-item {
-    background-color: #fff; /* Blanco para ítems de electivas individuales */
-    border: 1px dashed #ffb3d9; /* Borde punteado para diferenciarlas */
+    background-color: #fff;
+    border: 1px dashed #ffb3d9;
     border-radius: 8px;
     padding: 8px 12px;
     margin-bottom: 8px;
@@ -192,22 +191,22 @@ h3 {
     justify-content: space-between;
     align-items: center;
     font-size: 0.9em;
-    cursor: pointer; /* También clickeable para el checkbox */
+    cursor: pointer;
 }
 .elective-item:hover {
     background-color: #f8f8ff;
 }
 
-.elective-item label { /* Asegura que toda la fila sea clickeable para el checkbox */
+.elective-item label {
     display: flex;
     align-items: center;
     width: 100%;
-    cursor: inherit; /* Hereda el cursor pointer */
+    cursor: inherit;
 }
 
 .elective-item input[type="checkbox"] {
     margin-right: 10px;
-    transform: scale(1.1); /* Hace el checkbox un poco más grande */
+    transform: scale(1.1);
 }
 
 .elective-item .elective-name {
@@ -216,28 +215,26 @@ h3 {
 }
 
 .elective-item .elective-credits {
-    color: #87355d; /* Color para los créditos de electivas */
+    color: #87355d;
 }
 
-/* Estilo para electivas aprobadas (con checkbox) */
+/* Estilo para electivas aprobadas (checkbox marcado) */
 .elective-item.approved {
-    background-color: #d4edda; /* Verde claro para electivas aprobadas */
-    border-color: #28a745;
-    color: #155724;
+    background-color: #f1e6f9; /* Mismo violeta clarito que las obligatorias aprobadas */
+    border-color: #7B4B9D;
+    color: #5d3587;
 }
 
-/* Estado intermedio (semi aprobado) para electivas, aunque no lo uses con checkbox */
-.elective-item.semi-approved {
-    background-color: #e0e0e0;
-    border-color: #a0a0a0;
-    color: #555;
+.elective-item.approved .elective-name {
+    text-decoration: line-through;
+    font-weight: bold;
+    text-decoration-color: #7B4B9D;
 }
-
 
 .remove-elective-btn {
     background: none;
     border: none;
-    color: #cc0000; /* Color rojo para el botón de eliminar */
+    color: #cc0000;
     cursor: pointer;
     font-size: 1.2em;
     margin-left: 10px;
@@ -249,27 +246,27 @@ h3 {
     color: #ff0000;
 }
 
-/* Estilos para la nueva sección de totales */
+/* Estilos para la sección de totales */
 .total-credits-section {
-    background-color: #e6f7ff; /* Un azul claro para la sección de totales */
+    background-color: #e6f7ff;
     border-color: #a3daff;
-    flex-basis: 100%; /* Ocupa todo el ancho */
-    max-width: 100%; /* Asegura que no haya desbordamiento */
+    flex-basis: 100%;
+    max-width: 100%;
     padding: 20px;
     margin-top: 20px;
 }
 
 .total-credits-section h2 {
-    color: #007bff; /* Azul para el título principal de totales */
+    color: #007bff;
     border-bottom-color: #a3daff;
 }
 
 .total-credits-box {
-    background-color: #dbeeff; /* Azul aún más claro para el box interno */
+    background-color: #dbeeff;
 }
 
 .total-credits-box h3 {
-    background-color: #a3daff; /* Azul medio para el encabezado de resumen */
+    background-color: #a3daff;
     color: #0056b3;
 }
 
@@ -277,10 +274,10 @@ h3 {
     text-align: center;
     font-size: 1.2em;
     font-weight: bold;
-    color: #004085; /* Azul oscuro para los textos de créditos */
+    color: #004085;
     margin: 10px 0;
     padding: 5px;
-    border-bottom: 1px dashed #cceeff; /* Línea punteada entre los totales */
+    border-bottom: 1px dashed #cceeff;
 }
 
 .total-electives-display:last-child {
@@ -298,7 +295,7 @@ h3 {
     }
 
     .year-block {
-        min-width: 95%; /* Ocupa casi todo el ancho disponible */
+        min-width: 95%;
         padding: 15px;
     }
 
@@ -329,14 +326,14 @@ h3 {
 
     .elective-input-group {
         flex-direction: column;
-        padding: 10px; /* Ajuste el padding para móvil */
+        padding: 10px;
     }
 
     .elective-input-group input[type="text"],
     .elective-input-group input[type="number"],
     .elective-input-group button {
         width: 100%;
-        margin-bottom: 5px; /* Espacio entre elementos en móvil */
+        margin-bottom: 5px;
     }
     .elective-input-group button:last-child {
         margin-bottom: 0;
