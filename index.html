@@ -1,21 +1,56 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Malla Nutrición Udelar</title>
+    <title>Malla Curricular - Lic. en Nutrición</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Malla Curricular — Licenciatura en Nutrición (Udelar, Plan 2014)</h1>
-    <div class="grid">
-        <!-- Materias serán insertadas dinámicamente aquí -->
+    <div class="container">
+        <h1>Licenciatura en Nutrición – Plan 2014</h1>
+
+        <!-- BLOQUE DE AÑO -->
+        <div class="year-block">
+            <h2>Primer Año</h2>
+            <div class="semester-box">
+                <h3>Primer Semestre</h3>
+                <div class="course-list">
+                    <div class="course-item" data-name="Química General">
+                        <span class="course-name">Química General</span>
+                        <span class="course-credits">Cr: 6</span>
+                    </div>
+                    <div class="course-item" data-name="Matemática Básica">
+                        <span class="course-name">Matemática Básica</span>
+                        <span class="course-credits">Cr: 5</span>
+                    </div>
+                    <!-- Puedes seguir agregando más materias aquí -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ELECTIVAS Y OPTATIVAS -->
+        <div class="year-block electives-section">
+            <h2>Electivas y Optativas</h2>
+            <div class="semester-box">
+                <h3>Agregar nueva</h3>
+                <div class="elective-input-group">
+                    <input type="text" id="new-elective-name" placeholder="Nombre de la electiva">
+                    <input type="number" id="new-elective-credits" placeholder="Créditos">
+                    <button id="add-elective-btn">Agregar</button>
+                </div>
+                <div id="elective-courses-container"></div>
+            </div>
+        </div>
+
+        <!-- TOTAL CRÉDITOS -->
+        <div class="year-block total-credits-box">
+            <h3>Total Créditos Aprobados</h3>
+            <div class="total-electives-display">
+                <span id="total-electives-credits">0</span> créditos
+            </div>
+        </div>
     </div>
-    <div class="contador">
-        <p>Créditos exonerados: <span id="creditosExo">0</span></p>
-        <p>Créditos totales: <span id="creditosTotal">0</span></p>
-    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
